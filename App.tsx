@@ -439,7 +439,7 @@ const App: React.FC = () => {
                   href={link.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-12 border border-white/5 bg-white/[0.02] flex flex-col items-center gap-6 group hover:border-red-600/40 transition-all rounded-3xl"
+                  className="p-12 border border-white/5 bg-white/[0.02] flex flex-col items-center gap-6 group hover:border-red-600/40 transition-all rounded-3xl cursor-none"
                 >
                   <div className="text-gray-600 group-hover:text-red-500 transition-colors p-4 bg-white/5 rounded-full">
                     {link.icon}
