@@ -5,7 +5,7 @@
 */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import { Terminal, Cpu, Database, Brain, Mail, Menu, X, Linkedin, ArrowUpRight, Github, Sparkles, Layers, Code, Zap } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
@@ -141,10 +141,21 @@ const InteractiveName: React.FC<{ name: string }> = ({ name }) => {
 };
 
 const App: React.FC = () => {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const { scrollY } = useScroll();
+  const yTranslate = useTransform(scrollY, [0, 1000], [0, -100]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedExp, setSelectedExp] = useState<Project | null>(null);
+  const [navHidden, setNavHidden] = useState(false);
+
+  // Detect scroll direction to hide/show navbar
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
+    if (latest > previous && latest > 150) {
+      if (!navHidden) setNavHidden(true);
+    } else {
+      if (navHidden) setNavHidden(false);
+    }
+  });
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
@@ -163,8 +174,34 @@ const App: React.FC = () => {
       <FluidBackground />
       <AIChat />
       
-      <nav className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-12 py-8 mix-blend-difference">
-        <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter text-white">M.BANGARU</div>
+      <motion.nav 
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" }
+        }}
+        animate={navHidden && !mobileMenuOpen ? "hidden" : "visible"}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-12 py-8 mix-blend-difference"
+      >
+        <div className="flex items-center gap-4">
+          <a 
+            href="https://github.com/ManideepBangaru" 
+            target="_blank" 
+            rel="noreferrer"
+            className="text-white hover:text-red-500 transition-colors cursor-none p-1"
+          >
+            <Github size={20} />
+          </a>
+          <a 
+            href="https://www.linkedin.com/in/manideepbangaru" 
+            target="_blank" 
+            rel="noreferrer"
+            className="text-white hover:text-red-500 transition-colors cursor-none p-1"
+          >
+            <Linkedin size={20} />
+          </a>
+        </div>
+
         <div className="hidden md:flex gap-12 text-xs font-bold tracking-[0.3em] uppercase">
           {['Journey', 'Arsenal', 'Connect'].map((item) => (
             <button 
@@ -176,25 +213,23 @@ const App: React.FC = () => {
             </button>
           ))}
         </div>
-        <div className="hidden md:flex gap-4">
-          <a href="#" className="border border-white/10 px-6 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-red-600 hover:border-red-600 transition-all">
-            CV / RESUME
-          </a>
+        
+        <div className="md:hidden">
+          <button className="text-white z-50 p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+             {mobileMenuOpen ? <X /> : <Menu />}
+          </button>
         </div>
-        <button className="md:hidden text-white z-50" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-           {mobileMenuOpen ? <X /> : <Menu />}
-        </button>
-      </nav>
+      </motion.nav>
 
       <header className="relative h-[100svh] flex flex-col items-center justify-center overflow-visible px-4 z-20">
-        <motion.div style={{ y }} className="text-center flex flex-col items-center w-full max-w-7xl">
+        <motion.div style={{ y: yTranslate }} className="text-center flex flex-col items-center w-full max-w-7xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="mb-10 px-6 py-1.5 border border-red-500/30 rounded-full backdrop-blur-md flex items-center gap-3 bg-black/40"
           >
              <Sparkles size={14} className="text-red-500 animate-pulse" />
-            <span className="text-[10px] md:text-xs font-mono text-red-500 tracking-[0.5em] uppercase">Systems Operational</span>
+            <span className="text-[10px] md:text-xs font-mono text-red-500 tracking-[0.5em] uppercase">Neural Inference Active</span>
           </motion.div>
           <div className="relative w-full overflow-visible">
             <InteractiveName name="MANIDEEP" />
@@ -272,7 +307,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Arsenal Section - REFINED BENTO MATRIX */}
+        {/* Arsenal Section */}
         <section id="arsenal" className="relative py-32 md:py-48 px-6 bg-black">
           <div className="max-w-7xl mx-auto">
              <div className="flex flex-col mb-24 gap-4">
@@ -302,9 +337,7 @@ const App: React.FC = () => {
                   transition={{ delay: i * 0.1 }}
                   className={`relative group h-full p-8 md:p-12 border border-white/10 bg-white/[0.02] backdrop-blur-xl flex flex-col justify-between transition-all duration-700 hover:border-red-600/50 ${i === 1 ? 'lg:scale-105 z-30 shadow-[0_30px_100px_rgba(255,0,0,0.05)]' : 'z-20'}`}
                 >
-                  {/* Glowing Background on Hover */}
                   <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/5 transition-colors duration-500 pointer-events-none" />
-                  
                   <div>
                     <div className="flex items-center justify-between mb-8">
                       <div className="text-red-600 group-hover:scale-110 group-hover:text-red-500 transition-all duration-500">
@@ -316,12 +349,10 @@ const App: React.FC = () => {
                         <div className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
                       </div>
                     </div>
-                    
                     <h4 className="text-2xl md:text-3xl font-heading font-bold mb-4 tracking-tighter uppercase">{skill.category}</h4>
                     <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em] mb-10 font-mono group-hover:text-gray-300 transition-colors">
                       {skill.description}
                     </p>
-                    
                     <div className="space-y-4">
                       {skill.items.map((item, idx) => (
                         <div key={idx} className="flex items-center gap-4 group/item">
@@ -333,20 +364,12 @@ const App: React.FC = () => {
                       ))}
                     </div>
                   </div>
-
                   <div className="mt-12 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
                     <span className="text-[9px] font-mono text-red-500/50">SECURE_ACCESS_GRANTED</span>
                     <ArrowUpRight size={14} className="text-red-600" />
                   </div>
                 </motion.div>
               ))}
-            </div>
-
-            {/* Matrix Decoration */}
-            <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 opacity-20 grayscale pointer-events-none">
-                {['PYTORCH', 'TRANSFORMERS', 'LLM_OPS', 'NEURAL_NETS'].map(t => (
-                  <div key={t} className="border border-white/20 p-4 text-center text-[8px] font-mono tracking-[0.5em]">{t}</div>
-                ))}
             </div>
           </div>
         </section>
@@ -360,8 +383,8 @@ const App: React.FC = () => {
             </motion.div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border border-white/5">
               {[
-                { label: 'LinkedIn', icon: <Linkedin size={20}/>, url: 'https://linkedin.com' },
-                { label: 'GitHub', icon: <Github size={20}/>, url: 'https://github.com' },
+                { label: 'LinkedIn', icon: <Linkedin size={20}/>, url: 'https://www.linkedin.com/in/manideepbangaru' },
+                { label: 'GitHub', icon: <Github size={20}/>, url: 'https://github.com/ManideepBangaru' },
                 { label: 'Mail', icon: <Mail size={20}/>, url: 'mailto:bmd994@gmail.com' }
               ].map((link) => (
                 <a 
@@ -386,7 +409,7 @@ const App: React.FC = () => {
 
       <footer className="relative z-30 py-12 px-12 border-t border-white/5 bg-black">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-mono text-white/20 tracking-[0.3em] uppercase">
-          <div>© 2025 MANIDEEP BANGARU / NEURAL PORTFOLIO V1.4</div>
+          <div>© 2025 MANIDEEP BANGARU / NEURAL PORTFOLIO V1.6</div>
           <div className="flex gap-12">
             <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="hover:text-red-500 transition-colors">Surface Navigation</button>
           </div>
