@@ -5,7 +5,7 @@
 */
 
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
   const [cursorType, setCursorType] = useState<'EXPLORE' | 'CLICK' | 'CLOSE' | 'VIEW'>('EXPLORE');
@@ -65,21 +65,29 @@ const CustomCursor: React.FC = () => {
           }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
-          {/* Internal Glowing Pulse */}
+          {/* Internal Glowing Pulse - Hidden during CLICK and CLOSE actions */}
           <motion.div 
             className="absolute w-1.5 h-1.5 bg-red-600 rounded-full" 
-            animate={{ scale: cursorType !== 'EXPLORE' ? 2.5 : 1 }}
+            animate={{ 
+              scale: cursorType !== 'EXPLORE' && cursorType !== 'VIEW' ? 0 : 1,
+              opacity: (cursorType === 'CLICK' || cursorType === 'CLOSE') ? 0 : 1
+            }}
           />
 
-          {/* Contextual Action Label */}
-          <motion.span 
-            key={cursorType}
-            initial={{ opacity: 0, y: 10, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            className="text-[10px] font-black text-white uppercase tracking-[0.35em] drop-shadow-sm select-none"
-          >
-            {cursorType}
-          </motion.span>
+          {/* Contextual Action Label - Hidden during EXPLORE state */}
+          <AnimatePresence mode="wait">
+            {cursorType !== 'EXPLORE' && (
+              <motion.span 
+                key={cursorType}
+                initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.8 }}
+                className="text-[10px] font-black text-white uppercase tracking-[0.35em] drop-shadow-sm select-none"
+              >
+                {cursorType}
+              </motion.span>
+            )}
+          </AnimatePresence>
 
           {/* Pulsating Sensor Ring */}
           <motion.div 

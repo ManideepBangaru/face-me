@@ -6,7 +6,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from 'framer-motion';
-import { Terminal, Cpu, Database, Brain, Mail, Menu, X, Linkedin, ArrowUpRight, Github, Sparkles } from 'lucide-react';
+import { Terminal, Cpu, Database, Brain, Mail, Menu, X, Linkedin, ArrowUpRight, Github, Sparkles, Layers, Code, Zap } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GlitchText';
 import CustomCursor from './components/CustomCursor';
@@ -53,9 +53,24 @@ const EXPERIENCE: Project[] = [
 ];
 
 const SKILLS = [
-  { category: 'Intelligence', items: ['Prompt Engineering', 'NLP', 'Deep Learning', 'BERT'], icon: <Brain size={24}/> },
-  { category: 'Engineering', items: ['Python', 'SQL', 'PyTorch', 'Hadoop'], icon: <Cpu size={24}/> },
-  { category: 'Leadership', items: ['Cross-Functional Collaboration', 'Team Mentoring', 'Agile'], icon: <Terminal size={24}/> }
+  { 
+    category: 'Intelligence', 
+    items: ['Prompt Engineering', 'NLP Architectures', 'Deep Learning', 'BERT Optimization', 'Transformers'], 
+    icon: <Brain size={28}/>,
+    description: 'Advanced cognitive modeling and language processing.'
+  },
+  { 
+    category: 'Engineering', 
+    items: ['Python Expert', 'SQL Optimization', 'PyTorch', 'Hadoop', 'Cloud Deployment'], 
+    icon: <Cpu size={28}/>,
+    description: 'Scale-ready architectures and data pipelines.'
+  },
+  { 
+    category: 'Leadership', 
+    items: ['GenAI Strategy', 'Agile Execution', 'Cross-Functional Mentoring', 'Product Delivery'], 
+    icon: <Terminal size={28}/>,
+    description: 'Guiding teams through technical complexities.'
+  }
 ];
 
 const PhysicalChar: React.FC<{ char: string, index: number, mouseX: any, mouseY: any }> = ({ char, index, mouseX, mouseY }) => {
@@ -144,41 +159,33 @@ const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen text-white selection:bg-red-600 selection:text-white cursor-none overflow-x-hidden bg-black">
-      {/* Background and Torch reside at lower Z-indices to reveal only the void */}
       <CustomCursor />
       <FluidBackground />
-      
-      {/* AIChat and top-level interaction elements */}
       <AIChat />
       
-      {/* Content Layer (z-10+) ensures text information appears "as it is" and bright */}
       <nav className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-12 py-8 mix-blend-difference">
         <div className="font-heading text-xl md:text-2xl font-bold tracking-tighter text-white">M.BANGARU</div>
-        
         <div className="hidden md:flex gap-12 text-xs font-bold tracking-[0.3em] uppercase">
           {['Journey', 'Arsenal', 'Connect'].map((item) => (
             <button 
               key={item} 
               onClick={() => scrollToSection(item.toLowerCase())} 
-              className="hover:text-red-500 transition-colors text-white cursor-none bg-transparent border-none outline-none"
+              className="hover:text-red-500 transition-colors text-white cursor-none bg-transparent border-none"
             >
               {item}
             </button>
           ))}
         </div>
-        
         <div className="hidden md:flex gap-4">
           <a href="#" className="border border-white/10 px-6 py-2 text-[10px] font-bold tracking-widest uppercase hover:bg-red-600 hover:border-red-600 transition-all">
             CV / RESUME
           </a>
         </div>
-
         <button className="md:hidden text-white z-50" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
            {mobileMenuOpen ? <X /> : <Menu />}
         </button>
       </nav>
 
-      {/* Hero Content - Layered at z-20 to stay perfectly readable above the torch mask */}
       <header className="relative h-[100svh] flex flex-col items-center justify-center overflow-visible px-4 z-20">
         <motion.div style={{ y }} className="text-center flex flex-col items-center w-full max-w-7xl">
           <motion.div
@@ -189,14 +196,12 @@ const App: React.FC = () => {
              <Sparkles size={14} className="text-red-500 animate-pulse" />
             <span className="text-[10px] md:text-xs font-mono text-red-500 tracking-[0.5em] uppercase">Systems Operational</span>
           </motion.div>
-
           <div className="relative w-full overflow-visible">
             <InteractiveName name="MANIDEEP" />
             <div className="mt-[-2vw]">
               <InteractiveName name="BANGARU" />
             </div>
           </div>
-          
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -215,19 +220,27 @@ const App: React.FC = () => {
         </motion.div>
       </header>
 
-      {/* Main Sections - Layered at z-20 for clarity */}
       <main className="relative z-20">
-        {/* Experience Section */}
+        {/* Journey Section */}
         <section id="journey" className="relative py-32 md:py-48 px-6">
           <div className="max-w-[1400px] mx-auto">
-            <div className="flex flex-col mb-24">
-              <h2 className="text-7xl md:text-[10vw] font-heading font-bold uppercase leading-none text-white/[0.05] select-none">Experience</h2>
-              <div className="flex items-center gap-6 mt-[-2rem] md:mt-[-4rem] ml-4">
+            <div className="flex flex-col mb-24 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-fit cursor-none"
+              >
+                <GradientText 
+                  text="EXPERIENCE" 
+                  as="h2" 
+                  className="text-7xl md:text-[10vw] font-heading font-bold uppercase leading-none" 
+                />
+              </motion.div>
+              <div className="flex items-center gap-6 ml-4">
                 <span className="text-red-500 font-mono uppercase tracking-[0.5em] text-sm">The Milestone Map</span>
                 <div className="h-px flex-1 bg-red-900/20" />
               </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5 overflow-hidden">
               {EXPERIENCE.map((exp) => (
                 <motion.div
@@ -240,7 +253,6 @@ const App: React.FC = () => {
                     <img src={exp.image} alt={exp.company} className="h-full w-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[3s]" />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                  
                   <div className="absolute bottom-16 left-12 right-12 z-20">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="h-px w-8 bg-red-600" />
@@ -260,36 +272,81 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Skills Section */}
-        <section id="arsenal" className="relative py-32 md:py-48 px-6 overflow-hidden">
+        {/* Arsenal Section - REFINED BENTO MATRIX */}
+        <section id="arsenal" className="relative py-32 md:py-48 px-6 bg-black">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-              <div className="lg:col-span-4 sticky top-32">
-                <h2 className="text-5xl md:text-8xl font-heading font-bold mb-8 text-white/[0.05]">Arsenal</h2>
-                <div className="h-px w-24 bg-red-600 mb-8" />
-                <p className="text-lg text-gray-400 font-light leading-relaxed uppercase tracking-wider">
-                  Precision engineering and cognitive modeling at the intersection of data and strategy.
-                </p>
+             <div className="flex flex-col mb-24 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="w-fit cursor-none"
+              >
+                <GradientText 
+                  text="ARSENAL" 
+                  as="h2" 
+                  className="text-7xl md:text-[10vw] font-heading font-bold uppercase leading-none" 
+                />
+              </motion.div>
+              <div className="flex items-center gap-6 ml-4">
+                <span className="text-red-500 font-mono uppercase tracking-[0.5em] text-sm">Tech Stack Matrix</span>
+                <div className="h-px flex-1 bg-red-900/20" />
               </div>
+            </div>
 
-              <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-                {SKILLS.map((skill, i) => (
-                  <div key={i} className={`p-10 border border-white/5 bg-white/[0.01] backdrop-blur-md group hover:border-red-500/30 transition-all duration-500 ${i === 2 ? 'md:col-span-2' : ''}`}>
-                    <div className="text-red-700 mb-8 group-hover:text-red-500 group-hover:scale-110 transition-all origin-left">
-                      {skill.icon}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {SKILLS.map((skill, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className={`relative group h-full p-8 md:p-12 border border-white/10 bg-white/[0.02] backdrop-blur-xl flex flex-col justify-between transition-all duration-700 hover:border-red-600/50 ${i === 1 ? 'lg:scale-105 z-30 shadow-[0_30px_100px_rgba(255,0,0,0.05)]' : 'z-20'}`}
+                >
+                  {/* Glowing Background on Hover */}
+                  <div className="absolute inset-0 bg-red-600/0 group-hover:bg-red-600/5 transition-colors duration-500 pointer-events-none" />
+                  
+                  <div>
+                    <div className="flex items-center justify-between mb-8">
+                      <div className="text-red-600 group-hover:scale-110 group-hover:text-red-500 transition-all duration-500">
+                        {skill.icon}
+                      </div>
+                      <div className="flex gap-1">
+                        <div className="w-1 h-1 bg-red-600/30 rounded-full" />
+                        <div className="w-1 h-1 bg-red-600/30 rounded-full" />
+                        <div className="w-1 h-1 bg-red-600 rounded-full animate-pulse" />
+                      </div>
                     </div>
-                    <h4 className="text-2xl font-bold mb-8 font-heading tracking-widest uppercase">{skill.category}</h4>
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-6">
-                      {skill.items.map(item => (
-                        <div key={item} className="flex items-center gap-2 group/item">
-                          <div className="w-1 h-1 bg-red-900/50 group-hover/item:bg-red-500 transition-colors" />
-                          <span className="text-xs text-gray-500 group-hover/item:text-white transition-colors tracking-widest uppercase">{item}</span>
+                    
+                    <h4 className="text-2xl md:text-3xl font-heading font-bold mb-4 tracking-tighter uppercase">{skill.category}</h4>
+                    <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em] mb-10 font-mono group-hover:text-gray-300 transition-colors">
+                      {skill.description}
+                    </p>
+                    
+                    <div className="space-y-4">
+                      {skill.items.map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-4 group/item">
+                          <div className="h-[1px] w-0 group-hover/item:w-6 bg-red-600 transition-all duration-300" />
+                          <span className="text-xs md:text-sm font-medium tracking-widest text-gray-400 group-hover/item:text-white transition-colors uppercase">
+                            {item}
+                          </span>
                         </div>
                       ))}
                     </div>
                   </div>
+
+                  <div className="mt-12 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[9px] font-mono text-red-500/50">SECURE_ACCESS_GRANTED</span>
+                    <ArrowUpRight size={14} className="text-red-600" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Matrix Decoration */}
+            <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 opacity-20 grayscale pointer-events-none">
+                {['PYTORCH', 'TRANSFORMERS', 'LLM_OPS', 'NEURAL_NETS'].map(t => (
+                  <div key={t} className="border border-white/20 p-4 text-center text-[8px] font-mono tracking-[0.5em]">{t}</div>
                 ))}
-              </div>
             </div>
           </div>
         </section>
@@ -297,15 +354,10 @@ const App: React.FC = () => {
         {/* Connect Section */}
         <section id="connect" className="relative py-32 md:py-60 px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.div 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               className="mb-12"
-            >
+            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mb-12">
               <h2 className="text-5xl md:text-[10vw] font-heading font-bold uppercase mb-8 leading-none">Reach <GradientText text="OUT" /></h2>
               <p className="text-gray-500 tracking-[0.5em] uppercase text-[10px] mb-16">Opening Secure Communication Lines</p>
             </motion.div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/5 border border-white/5">
               {[
                 { label: 'LinkedIn', icon: <Linkedin size={20}/>, url: 'https://linkedin.com' },
@@ -334,14 +386,14 @@ const App: React.FC = () => {
 
       <footer className="relative z-30 py-12 px-12 border-t border-white/5 bg-black">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-mono text-white/20 tracking-[0.3em] uppercase">
-          <div>© 2025 MANIDEEP BANGARU / NEURAL PORTFOLIO V1.3</div>
+          <div>© 2025 MANIDEEP BANGARU / NEURAL PORTFOLIO V1.4</div>
           <div className="flex gap-12">
             <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="hover:text-red-500 transition-colors">Surface Navigation</button>
           </div>
         </div>
       </footer>
 
-      {/* Detailed Modal with Highest Z-index */}
+      {/* Experience Modal */}
       <AnimatePresence>
         {selectedExp && (
           <motion.div
@@ -365,12 +417,10 @@ const App: React.FC = () => {
               >
                 <X size={20} />
               </button>
-
               <div className="w-full md:w-2/5 h-80 md:h-auto relative">
                 <img src={selectedExp.image} alt={selectedExp.company} className="absolute inset-0 w-full h-full object-cover grayscale opacity-40" />
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black" />
               </div>
-
               <div className="w-full md:w-3/5 p-12 md:p-20 flex flex-col justify-center">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="h-px w-12 bg-red-600" />
